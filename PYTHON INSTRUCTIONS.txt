@@ -1,0 +1,35 @@
+run the script as simply "python query_handler.py" when envirionment is active
+
+query parameters are to be written to the file "input.txt" by the REST endpoint
+
+for group by query, the format of input is
+	line 1: query type //(group/join)
+	line 2: table name //(Users/Zipcodes/Movies/Ratings)
+	line 3: comma separated columns list //(no trailing comma)
+	line 4: FUNC(COLUMN1) //just like that in text format
+	line 5: X
+eg-
+	group
+	Users
+	age, gender
+	COUNT(age)
+	18
+
+for join query, format of input
+	line 1: query type //(group/join)
+	line 2: table 1 name //(Users/Zipcodes/Movies/Ratings)
+	line 3: table 2 name //(Users/Zipcodes/Movies/Ratings)
+	line 4: column name for join
+	line 5: condition 2 //only simple predicate on some column, lite for now
+eg-
+1)	join
+	Users
+	Zipcodes
+	zipcode
+	Users.age > 18
+
+2)	join
+	Users
+	Ratings
+	userID
+	Ratings.rating > 3
