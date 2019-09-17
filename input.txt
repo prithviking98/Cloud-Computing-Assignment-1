@@ -2,4 +2,4 @@ group
 Users
 age, gender
 COUNT(age)
-1
+18

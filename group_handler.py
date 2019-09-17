@@ -1,6 +1,7 @@
 from schemas import *
 from pyspark.sql import SparkSession
 import shutil
+import os
 
 def group_handler(inputFile):
 	print("handling group query")
@@ -52,5 +53,6 @@ def group_handler(inputFile):
 	"HAVING {}>{}".format(columns, func, tableName, columns, func, x)
 	result = spark.sql(groupByQuery)
 	result.show()
-	shutil.rmtree("output") #removing previously made directory
+	if "output" in os.listdir():
+		shutil.rmtree("output") #removing previously made directory
 	result.coalesce(1).write.format("json").save("output")

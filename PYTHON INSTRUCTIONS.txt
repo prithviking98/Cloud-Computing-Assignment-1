@@ -1,4 +1,5 @@
 run the script as simply "python query_handler.py" when envirionment is active
+if the REST endpoint is in python, I could just turn it into a module and you can directly call a function "query_handler()", we'll do that later as per need
 
 query parameters are to be written to the file "input.txt" by the REST endpoint
 
@@ -33,3 +34,6 @@ eg-
 	Ratings
 	userID
 	Ratings.rating > 3
+
+***OUTPUT***
+output is stored in JSON format in <project folder path>/output/part-00000-... , the exact file name isn't important, it's just one file starting with "part".

@@ -1,18 +1,18 @@
 from pyspark.sql.types import *
 
 #defining schemas for the tables
-schemaUsers = StructType().add("userid",LongType()) \
+schemaUsers = StructType().add("userid",LongType(),False) \
 	.add("age", IntegerType()) \
 	.add("gender", StringType()) \
 	.add("occupation", StringType()) \
-	.add("zipcode", LongType())
+	.add("zipcode", StringType(), False)
 
-schemaZipcodes = StructType().add("zipcode", LongType()) \
+schemaZipcodes = StructType().add("zipcode", StringType(), False) \
 	.add("zipcodeType", StringType()) \
 	.add("city", StringType()) \
 	.add("state", StringType())
 
-schemaMovies = StructType().add("movieID", LongType()) \
+schemaMovies = StructType().add("movieID", LongType(), False) \
 	.add("title", StringType()) \
 	.add("releaseDate", StringType()) \
 	.add("unknown", IntegerType()) \
@@ -35,7 +35,7 @@ schemaMovies = StructType().add("movieID", LongType()) \
 	.add("war", IntegerType()) \
 	.add("western", IntegerType()) \
 
-schemaRatings = StructType().add("userID", LongType()) \
-	.add("movieID", LongType()) \
+schemaRatings = StructType().add("userID", LongType(), False) \
+	.add("movieID", LongType(), False) \
 	.add("rating", IntegerType()) \
 	.add("timestamp", LongType())
