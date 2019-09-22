@@ -52,7 +52,8 @@ def group_handler(inputFile):
 	"GROUP BY {} "\
 	"HAVING {}>{}".format(columns, func, tableName, columns, func, x)
 	result = spark.sql(groupByQuery)
-	result.show()
+	# result.show()
+	print(result.schema)
 	if "output" in os.listdir():
 		shutil.rmtree("output") #removing previously made directory
 	result.coalesce(1).write.format("json").save("output")

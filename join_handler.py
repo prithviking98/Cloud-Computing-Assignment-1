@@ -89,6 +89,6 @@ def join_handler(inputFile):
 	# result = table1Name.join(table2, table1.zipcode == table2.zipcode)
 	print(result.schema)
 	# result.show()
-	if "output" in os.listdir():
-		shutil.rmtree("output") #removing previously made directory
-	result.coalesce(1).write.format("json").save("output")
+	# if "output" in os.listdir():
+	# 	shutil.rmtree("output") #removing previously made directory
+	# result.coalesce(1).write.format("json").save("output")
