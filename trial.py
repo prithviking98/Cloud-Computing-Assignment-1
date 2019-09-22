@@ -8,7 +8,7 @@
 
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
-import os
+import os,shutil
 
 queryType = 0
 tables = [0,0,0,0]
@@ -820,6 +820,12 @@ if __name__ == '__main__':
     arg3 = ""
     arg4 = ""
     arg5 = ""
+    a = ""
+    b = ""
+    c = ""
+    t = ""
+    op = ""
+    x = ""
     movieFields = {
     "Movie1" : "0",
 "Movie2" : "1",
@@ -842,7 +848,7 @@ if __name__ == '__main__':
 "Movie19" : "18",
 "Movie20" : "19",
 "checkBox_9" : "20",
-"Movie22" : "21",
+"Movie22" : "21"
     }
 
     userFields = {
@@ -887,6 +893,9 @@ if __name__ == '__main__':
         ui7.setupUi(MainWindow)
         MainWindow.show()
         app.exec()
+
+        typeOfQuery = 0
+        #if tables[0] == 1 and tables[]
         print(columnForJoin,operator,joinX)
     elif tables[0]==1:
         d = {""}
@@ -946,7 +955,11 @@ if __name__ == '__main__':
         arg5 = ratingFields[ratingAggregation]
         print(ratingGroup,ratingAggregation,ratingAggregationFunction,ratingX)
     tableNames = ["users.csv","zipcodes.csv","movies.csv","rating.csv"]
-    arg0 = "input/"+tableNames[tableIndex]
-    arg1 = "output"
-    os.system("rm -r /usr/local/hadoop/output")
-    #os.system("/usr/local/hadoop/bin/hadoop jar /usr/local/hadoop/bin/hadoop")
+    arg0 = "$HADOOP_HOME/input/"+tableNames[tableIndex]
+    arg1 = "$HADOOP_HOME/output"
+    shutil.rmtree("/usr/local/hadoop/output/",ignore_errors = True)
+    if queryType == 2:
+    	os.system('/usr/local/hadoop/bin/hadoop jar $HADOOP_HOME/q2.jar Query2.q2 ' + arg0 + " " + arg1 + " "+ arg2 + " " +arg3+ " "+arg4+ " "+arg5)
+
+    else:
+    	os.system('/usr/local/hadoop/bin/hadoop jar $HADOOP_HOME/q1.jar query1.Q1 ' + arg0 + " " + arg1 + " "+ arg2 + " " +arg3+ " "+arg4+ " "+arg5)
