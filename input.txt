@@ -1,5 +1,5 @@
-group
+join
 Users
-age, gender
-COUNT(age)
-18
+Ratings
+userID
+Users.age > 18

@@ -9,6 +9,7 @@
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os,shutil
+import json
 
 queryType = 0
 tables = [0,0,0,0]
@@ -226,7 +227,7 @@ class Ui_MainWindow3(object):
             userGroup[4] = 1
         userAggregation = str(self.Aggregation.currentText())
         userAggregationFunction = str(self.AggregationFunction.currentText())
-        print(self.AggregationFunction.currentText())
+        # print(self.AggregationFunction.currentText())
 
         userX = str(self.ValueOfX.text())
         MainWindow.close()
@@ -724,7 +725,7 @@ class Ui_MainWindow6(object):
             ratingGroup[1] = 1
         if self.Rating.isChecked():
             ratingGroup[2] = 1
-        if self.TimeStamp.isChecked():
+        if self.checkBox.isChecked():
             ratingGroup[3] = 1
 
         ratingAggregation = str(self.Aggregation.currentText())
@@ -826,6 +827,8 @@ if __name__ == '__main__':
     t = ""
     op = ""
     x = ""
+    input1 = ""
+    input2 = ""
     movieFields = {
     "Movie1" : "0",
 "Movie2" : "1",
@@ -872,6 +875,40 @@ if __name__ == '__main__':
     "Rating" : "2",
     "TimeStamp" : "3"
     }
+
+    movieF = {
+    "movieid" : "0",
+    "title" : "1",
+    "releasedate" : "2",
+    "unknown" : "3",
+    "action" : "4",
+    "adventure" : "5",
+    "animation" : "6",
+ 	"children" : "7",
+  	"comedy" : "8",
+  	"crime" : "9",
+  	"documentary" : "10",
+  	"drama" : "11",
+  	"fantasy" : "12",
+	"film noir" : "13",
+  	"horror" : "14",
+  	"musical" : "15",
+  	"mystery" : "16",
+  	"romance" : "17",
+  	"sci-fi" : "18",
+	"thriller" : "19",
+  	"war" : "20",
+  	"western" : "21",
+    }
+    userF = {
+    "userid" :"0", "age" :"1", "gender" :"2", "occupation":"3" , "zipcode":"4"
+    }
+    zipcodeF = {
+    "zipcode":"0" , "zipcodetype":"1",  "city":"2",  "state":"3"
+    }
+    ratingF = {
+    "userid":"0" , "movieid":"1",  "rating":"2" , "timestamp":"3"
+    }
     dictFunc = {"Count":"0","Max":"1","Min":"2","Sum":"3"}
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
@@ -880,14 +917,15 @@ if __name__ == '__main__':
     MainWindow.show()
 
     app.exec()
-    print(queryType)
+    # print(queryType)
     ui2 = Ui_MainWindow2()
     ui2.setupUi(MainWindow)
     MainWindow.show()
 
     app.exec()
     tableIndex = -1
-    print(tables)
+    # print(tables)
+    typeOfQuery = 0
     if queryType == 1:
         ui7 = Ui_MainWindow7()
         ui7.setupUi(MainWindow)
@@ -895,8 +933,65 @@ if __name__ == '__main__':
         app.exec()
 
         typeOfQuery = 0
-        #if tables[0] == 1 and tables[]
-        print(columnForJoin,operator,joinX)
+        #joining users and zipcodes
+        if tables[0] == 1 and tables[1] == 1:
+        	typeOfQuery = 1
+        #joining users and ratings
+        elif tables[0] == 1 and tables[3] == 1:
+        	typeOfQuery = 2
+        #joining movies and ratings
+        elif tables[2] == 1 and tables[3] == 1:
+        	typeOfQuery = 3
+
+        c1 = columnForJoin.split(".")
+        # print(typeOfQuery,type(c1[0].lower()),c1[1])
+        if typeOfQuery == 1:
+        	a = "4"
+        	b = "0"
+        	if c1[0].lower() == "users":
+        		t = "0"
+        		c = userF[c1[1].lower()]
+        	else:
+        		t = "1"
+        		c = zipcodeF[c1[1].lower()]
+        	input1 = "$HADOOP_HOME/input/users.csv"
+        	input2 = "$HADOOP_HOME/input/zipcodes.csv"
+
+        elif typeOfQuery == 2:
+        	a = "0"
+        	b = "0"
+        	if c1[0].lower() == "users":
+        		t = "0"
+        		c = userF[c1[1].lower()]
+        	else:
+        		t = "1"
+        		c = ratingF[c1[1].lower()]
+        	input1 = "$HADOOP_HOME/input/users.csv"
+        	input2 = "$HADOOP_HOME/input/rating.csv"
+        elif typeOfQuery == 3:
+        	a = "0"
+        	b = "1"
+        	if c1[0].lower() == "movies":
+        		t = "0"
+        		c = movieF[c1[1].lower()]
+        	else:
+        		t = "1"
+        		c = ratingF[c1[1].lower()]
+        	input1 = "$HADOOP_HOME/input/movies.csv"
+        	input2 = "$HADOOP_HOME/input/rating.csv"
+        else:
+        	print("Not a valid request")
+        	exit()
+        if operator == ">":
+        	op = "0"
+        elif operator == "<":
+        	op = "1"
+        elif operator == "!=":
+        	op = "3"
+        else:
+        	op = "2"
+        x = str(joinX)
+        # print(columnForJoin,operator,joinX)
     elif tables[0]==1:
         d = {""}
         tableIndex = 0
@@ -904,14 +999,14 @@ if __name__ == '__main__':
         ui3.setupUi(MainWindow)
         MainWindow.show()
         app.exec()
-        print(userGroup,userAggregation,userAggregationFunction,userX)
+        # print(userGroup,userAggregation,userAggregationFunction,userX)
         arg2 = dictFunc[userAggregationFunction]
         arg3 = userX
         s = ""
         for i in userGroup:
             s=s+str(i)
         arg4 = s
-        arg5 = userFields[userAggregation]
+        arg5 = userF[userAggregation.lower()]
     elif tables[1] == 1:
         tableIndex = 1
         ui4 = Ui_MainWindow4()
@@ -924,7 +1019,7 @@ if __name__ == '__main__':
         for i in zipGroup:
             s=s+str(i)
         arg4 = s
-        arg5 = zipcodeFields[zipAggregation]
+        arg5 = zipcodeF[zipAggregation.lower()]
         print(zipGroup,zipAggregation,zipAggregationFunction,zipX)
     elif tables[2] == 1:
         tableIndex = 2
@@ -938,7 +1033,7 @@ if __name__ == '__main__':
         for i in movieGroup:
             s=s+str(i)
         arg4 = s
-        arg5 = movieFields[movieAggregation]
+        arg5 = movieF[movieAggregation.lower()]
         print(movieGroup,movieAggregation,movieAggregationFunction,movieX)
     elif tables[3] == 1:
         tableIndex = 3
@@ -952,14 +1047,111 @@ if __name__ == '__main__':
         for i in ratingGroup:
             s=s+str(i)
         arg4 = s
-        arg5 = ratingFields[ratingAggregation]
+        arg5 = ratingF[ratingAggregation.lower()]
         print(ratingGroup,ratingAggregation,ratingAggregationFunction,ratingX)
     tableNames = ["users.csv","zipcodes.csv","movies.csv","rating.csv"]
     arg0 = "$HADOOP_HOME/input/"+tableNames[tableIndex]
     arg1 = "$HADOOP_HOME/output"
     shutil.rmtree("/usr/local/hadoop/output/",ignore_errors = True)
+    timeForHadoop = -1
     if queryType == 2:
+    	t0 = time.time()
     	os.system('/usr/local/hadoop/bin/hadoop jar $HADOOP_HOME/q2.jar Query2.q2 ' + arg0 + " " + arg1 + " "+ arg2 + " " +arg3+ " "+arg4+ " "+arg5)
+    	t1 = time.time()
+    	timeForHadoop = t1-t0
+    else:
+    	t0 = time.time()
+    	os.system('/usr/local/hadoop/bin/hadoop jar $HADOOP_HOME/q1.jar query1.Q1 ' + input1 + " " + input2 + " "+ arg1 + " " +a+ " "+b+ " "+c +" "+t+" "+op+" "+x)
+    	t1 = time.time()
+    	timeForHadoop = t1-t0
+    print("time to run Hadoop: ",timeForHadoop)
+    timeForSpark = 0
+    shutil.rmtree("input.txt",ignore_errors = True)
+    file = open("input.txt","w+")
+    dictForSpark = {
+    0:"Users",1:"Zipcodes",2:"Movies",3:"Ratings"
+    }
+    dictForUser = {0:"userid",1:"age",2:"gender",3:"occupation",4:"zipcode"}
+    dictForZip = {0:"zipcode",1:"zipcodetype",3:"city",4:"state"}
+    dictForMovie = {0:"movieid",1:"title",2:"releasedate",3:"unknown",4:"action",5:"adventure",6:"animation",
+    7:"children",8:"comedy",9:"crime",10:"documentary",11:"drama",12:"fantasy",13:"film_noir",14:"horror",15:"musical",16:"mystery",17:"romance",18:"sci_fi",19:"thriller",20:"war",21:"western"}
+    dictForRating = {0:"userid",1:"movieid",2:"rating",3:"timestamp"}
+    flag = 0
+    if queryType == 1:
+    	file.write("join\n")
+    	
+    	for i in range(len(tables)):
+    		if tables[i] == 1:
+    			file.write(dictForSpark[i]+"\n")
+    	if typeOfQuery == 1:
+    		file.write("zipcode\n")
+    	elif typeOfQuery == 2:
+    		file.write("userID\n")
+    	else:
+    		file.write("movieID\n")
+    	col = columnForJoin.lower()
+    	# col0 = columnForJoin[0].upper()
+    	a = col[0].upper()
+    	b = a + col[1:]
+    	file.write(b+" "+operator+" "+joinX)
 
     else:
-    	os.system('/usr/local/hadoop/bin/hadoop jar $HADOOP_HOME/q1.jar query1.Q1 ' + arg0 + " " + arg1 + " "+ arg2 + " " +arg3+ " "+arg4+ " "+arg5)
+    	file.write("group\n")
+    	if tables[0] == 1:
+    		file.write("Users\n")
+    		for i in range(len(userGroup)):
+    			if userGroup[i]==1:
+    				if flag == 0:
+    					flag = 1
+    					file.write(dictForUser[i])
+    				else:
+    					file.write(","+dictForUser[i])
+    		file.write("\n")
+    		file.write(userAggregationFunction+"("+userAggregation.lower()+")\n")
+    		file.write(userX)
+    	if tables[1] == 1:
+    		file.write("Zipcodes\n")
+    		for i in range(len(zipGroup)):
+    			if zipGroup[i]==1:
+    				if flag == 0:
+    					flag = 1
+    					file.write(dictForZip[i])
+    				else:
+    					file.write(","+dictForZip[i])
+    		file.write("\n")
+    		file.write(zipAggregationFunction+"("+zipAggregation.lower()+")\n")
+    		file.write(zipX)
+    	if tables[2] == 1:
+    		file.write("Movies\n")
+    		for i in range(len(movieGroup)):
+    			if movieGroup[i]==1:
+    				if flag == 0:
+    					flag = 1
+    					file.write(dictForMovie[i])
+    				else:
+    					file.write(","+dictForMovie[i])
+    		file.write("\n")
+    		file.write(movieAggregationFunction+"("+movieAggregation.lower()+")\n")
+    		file.write(movieX)
+    	if tables[3] == 1:
+    		file.write("Ratings\n")
+    		for i in range(len(ratingGroup)):
+    			if ratingGroup[i]==1:
+    				if flag == 0:
+    					flag = 1
+    					file.write(dictForRating[i])
+    				else:
+    					file.write(","+dictForRating[i])
+    		file.write("\n")
+    		file.write(ratingAggregationFunction+"("+ratingAggregation.lower()+")\n")
+    		file.write(ratingX)
+    	file.close()
+
+    time.sleep(5);
+    t0 = time.time()
+    # os.system("source .env/bin/activate")
+    os.system("python3 query_handler.py")
+    t1 = time.time()
+    timeForSpark = t1-t0
+    print("time to run spark: ",timeForSpark)
+    # f = open('/usr/local/hadoop/output/part-r-')

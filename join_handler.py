@@ -47,7 +47,7 @@ def join_handler(inputFile):
 		print("invalid table 1 name")
 		return
 	table1.show()
-	print("table1 count",table1.select(table1["userID"]).count())
+	# print("table1 count",table1.select(table1["userID"]).count())
 
 	table2Name = inputFile.readline().rstrip('\n')
 	if table2Name == "Users":
@@ -66,7 +66,7 @@ def join_handler(inputFile):
 		print("invalid table 2 name")
 		return
 	table2.show()
-	print("table2 count",table2.count())
+	# print("table2 count",table2.count())
 
 
 	column = inputFile.readline().rstrip('\n')
