@@ -44,7 +44,7 @@ def join_handler(inputFile):
 		table1 = spark.read.csv("rating.csv", schemaRatings, sep=",")
 		table1.createOrReplaceTempView("Ratings")
 	else:
-		print("invalid table 1 name")
+		print("invalid table 1 name",table1Name)
 		return
 	table1.show()
 	# print("table1 count",table1.select(table1["userID"]).count())

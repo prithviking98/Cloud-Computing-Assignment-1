@@ -1,5 +1,5 @@
-join
-Users
+group
 Ratings
-userID
-Users.age > 18
+userid
+Count(movieid)
+100

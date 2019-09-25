@@ -1094,7 +1094,7 @@ if __name__ == '__main__':
     	a = col[0].upper()
     	b = a + col[1:]
     	file.write(b+" "+operator+" "+joinX)
-
+    	file.close()
     else:
     	file.write("group\n")
     	if tables[0] == 1:
@@ -1147,7 +1147,7 @@ if __name__ == '__main__':
     		file.write(ratingX)
     	file.close()
 
-    time.sleep(5);
+    # time.sleep(5);
     t0 = time.time()
     # os.system("source .env/bin/activate")
     os.system("python3 query_handler.py")

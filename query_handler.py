@@ -14,9 +14,7 @@ with open("input.txt","r") as inputFile:
 	queryType = inputFile.readline().rstrip('\n')
 	if queryType == "group":
 		group_handler(inputFile)
-	elif queryType == "join":
-		join_handler(inputFile)
 	else:
-		print("invalid query type",queryType)
+		join_handler(inputFile)
 
 
